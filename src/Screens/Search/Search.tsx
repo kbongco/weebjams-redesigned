@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react"
 import styled from "styled-components"
 import { Anime } from "../../interfaces/anime-interface"
+import { sendJikanData } from "../../constants/constants"
+import { useNavigate } from 'react-router-dom';
+
 
 const SearchWelcome = styled.h1`
 color: white;
@@ -29,6 +32,7 @@ margin-left: 1rem;
 const TopAnimeContainer = styled.div` 
 text-align: left;
 color: white;
+margin-top: 1rem;
 `
 
 const Top10Header = styled.h1`
@@ -51,6 +55,7 @@ gap: 1rem;
 const CurrentAnimeSznContainer = styled.div`
 display: flex;
 flex-direction: column;
+margin-top: 1rem;
 `;
 
 const CurrentSznHeader = styled.h1`
@@ -72,17 +77,9 @@ export default function Search() {
   const [buttonPress, setButtonPress] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [top10Anime, setTop10Anime] = useState<any>([]);
-
-  const handleInputChange = (newValue: string) => {
-    setInputValue(newValue);
-  }
-
-  const searchSongs = () => {
-    console.log(inputValue);
-  }
-
-
   const [currentSeason, setCurrentSeason] = useState([]);
+  const [searchedAnime, setSearchedAnime] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -112,6 +109,39 @@ export default function Search() {
     fetchData();
   }, []);
 
+  const handleInputChange = (e) => {
+    setInputValue(e?.target?.value);
+  }
+  const searchAnime = async (query:string) => {
+    try {
+      const trimmedValue = typeof query === 'string' ? query.trim() : '';
+      if (trimmedValue !== '') {
+        const response = await fetch(sendJikanData(trimmedValue));
+        const data = await response.json();
+        setSearchedAnime(data.data);
+        navigate('/results', { state: { searchedAnime: data.data } });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    // Debounce the searchAnime function
+    const debounceSearch = setTimeout(() => {
+      searchAnime(inputValue);
+    }, 500); // Adjust the delay as needed (e.g., 500 milliseconds)
+
+    // Cleanup function to clear the timeout
+    return () => clearTimeout(debounceSearch);
+  }, [inputValue]);
+
+  const handleSearch = () => {
+    searchAnime(inputValue); // Call searchAnime when the button is clicked
+  };
+
+  
+
   return (
     <>
       <WelcomeContainer>
@@ -121,7 +151,7 @@ export default function Search() {
       <SearchContainer>
         <input className="input is-rounded" type="text" placeholder="Text input" onChange={handleInputChange} />
         <ButtonContainer>
-          <button className="button is-success is-rounded" onClick={searchSongs}>Search</button>
+          <button className="button is-success is-rounded" onClick={handleSearch}>Search</button>
         </ButtonContainer>
       </SearchContainer>
       <TopAnimeContainer>

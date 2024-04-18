@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import './App.css'
 import Login from './Login/Login'
 import Search from './Screens/Search/Search';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Results from './Screens/Results/Results';
 
 function App() {
 
@@ -29,7 +31,13 @@ function App() {
   }, []);
 
   return (
-    <> {token ? <Search/> : <Login/>}
+    <>
+    <Router>
+      <Routes>
+          <Route path="/" element={token ? <Search /> : <Login />} />
+          <Route path='/results' element={token ? <Results/> : <Login/>}/>
+      </Routes>
+    </Router>
     </>
   )
 }
