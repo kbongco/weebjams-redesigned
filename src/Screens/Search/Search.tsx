@@ -3,6 +3,7 @@ import styled from "styled-components"
 import { Anime } from "../../interfaces/anime-interface"
 import { sendJikanData } from "../../constants/constants"
 import { useNavigate } from 'react-router-dom';
+import NavBar from "../../Components/NavBar";
 
 
 const SearchWelcome = styled.h1`

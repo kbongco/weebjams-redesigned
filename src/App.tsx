@@ -4,6 +4,7 @@ import Login from './Login/Login'
 import Search from './Screens/Search/Search';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Results from './Screens/Results/Results';
+import NavBar from './Components/NavBar';
 
 function App() {
 
@@ -32,6 +33,7 @@ function App() {
 
   return (
     <>
+    <NavBar/>
     <Router>
       <Routes>
           <Route path="/" element={token ? <Search /> : <Login />} />

@@ -43,7 +43,7 @@ flex-direction: column;
 justify-content: space-around;
 `
 
-export default function Card({ header, body, image }: CardProps) {
+export default function Card({ header, cardBody, image }: CardProps) {
   return (
     <>
       <CardContainers>
@@ -52,11 +52,11 @@ export default function Card({ header, body, image }: CardProps) {
         </CardHeaderContainer>
         <CardContentContainer>
           <ImageContainer>
-            <ImageIcon src='https://cdn.myanimelist.net/images/anime/1302/94882t.jpg' />
+            <ImageIcon src={image}/>
           </ImageContainer>
           <CardBodyContainer>
             <div>
-              <CardBodyText>Grand Blue</CardBodyText>
+              <CardBodyText>{cardBody}</CardBodyText>
             </div>
             <div>
               <CardBodyText>View More</CardBodyText>
